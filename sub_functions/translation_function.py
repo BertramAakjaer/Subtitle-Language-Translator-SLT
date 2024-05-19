@@ -3,27 +3,44 @@ from datetime import datetime
 import streamlit as st
 import os
 
+# Function to translate a SubRip file
 def translate_text(content, 
                    new_language, 
                    time_text, 
                    curr_translation,
                    progress_bar, 
                    new_file_name) -> None:
-
+  
+  # Variables to be used in function
   just_started_new = False
   curr_subtitle = 1
 
+  # Arrays for pasting timestamps and lines that should be translated
   lines_to_translate = []
   timestamps = []
+  
+  # Debug mode for shorter translation times
+  debug_mode = False
+  
+  if debug_mode:
+    rotation_count = 0
 
-  rotation_count = 0
-
+  # For loop to "clean" incomming text into text to translate and timestamps
   for line in content:
+    # Writing to user interface
     time_text.text("Calculating time left...")
     curr_translation.text("Sorting files...")
-    if rotation_count >= 150:
-      break
-    rotation_count += 1
+    
+    # Stop early in debug mode
+    if debug_mode:
+      if rotation_count >= 150:
+        break
+      else:
+        rotation_count += 1
+    
+    ##############################
+    # Cleanup of the actual text #
+    ##############################
     
     if just_started_new:
       timestamps.append(line)
@@ -44,18 +61,20 @@ def translate_text(content,
     else:
       lines_to_translate[-1] += ('\n' + str(line))
 
-
-
+  # Starting translator used in the googletrans libary
   translator = Translator()
+  
   translated_lines = []
 
   curr_translation.text("Translation started...")
   start_timecode = datetime.now().strftime('%H:%M:%S.%f')
   
+  # Loop for translating every line in array
   for i, to_translation in enumerate(lines_to_translate):
     progress_translation = (i + 1)/len(lines_to_translate)
     progress_bar.progress(progress_translation)
     
+    # Calculating remaining time
     if to_translation != lines_to_translate[0]:
             time_estimate = datetime.now().strftime('%H:%M:%S.%f')
             
@@ -67,16 +86,22 @@ def translate_text(content,
             
             time_text.text(time_text_seconds + " / " + time_text_minutes)
     
+    # Translating string with libary
     translation = translator.translate(to_translation, dest=new_language)
-      
+    
+    # Printing current translation to user
     curr_translation.text(f"{translation.origin} ({translation.src}) --> {translation.text} ({translation.dest})")
-      
+    
     translated_lines.append(translation.text)
-      
+  
+  
+  ###############################
+  # Writing translation to file #
+  ###############################
   translation_file = open(r"output/{}.srt".format(new_file_name), "w", encoding='utf8')
-
-
+  
   for i, timestamp in enumerate(timestamps):
+    # Joining different parts of information to single string
     temp_list = [str(i + 1), timestamp, translated_lines[i], '\n']
     translation_file.write('\n'.join(temp_list))
 
