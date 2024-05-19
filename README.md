@@ -1,177 +1,80 @@
-<picture>
-   <source media="(prefers-color-scheme: dark)" srcset="docs/images/fc_logo_full_transparent-bg_white-fg.png">
-   <source media="(prefers-color-scheme: light)" srcset="docs/images/fc_logo_full_transparent-bg.png">
-   <img alt="Firecracker Logo Title" width="750" src="docs/images/fc_logo_full_transparent-bg.png">
-</picture>
+#  **Subtitle Language Translation (SLT)**
 
-Our mission is to enable secure, multi-tenant, minimal-overhead execution of
-container and function workloads.
+>  **Note**  
+>  If you're using any other OS than windows this will probaly not work, because it is depending on the python libary **os** which is made for windows only, [see this doc for more info](https://docs.python.org/3/library/os.html)
 
-Read more about the Firecracker Charter [here](CHARTER.md).
+##  **Key Features**
 
-## What is Firecracker?
+*  Automatic origin language finder
 
-Firecracker is an open source virtualization technology that is purpose-built
-for creating and managing secure, multi-tenant container and function-based
-services that provide serverless operational models. Firecracker runs workloads
-in lightweight virtual machines, called microVMs, which combine the security and
-isolation properties provided by hardware virtualization technology with the
-speed and flexibility of containers.
+*  Easy use with the use of the [Streamlit](https://streamlit.io/) library to UI
+  
+*  Timestamps and other key information like formatting will be kept in the SubRip (.srt) file
 
-## Overview
+*  Loading bar showing the progress of translated files
+   *  With text that shows an estimate of time to run the task
+  
+*  Choose from a variety of languages (With the ability to add customs as well)
 
-The main component of Firecracker is a virtual machine monitor (VMM) that uses
-the Linux Kernel Virtual Machine (KVM) to create and run microVMs. Firecracker
-has a minimalist design. It excludes unnecessary devices and guest-facing
-functionality to reduce the memory footprint and attack surface area of each
-microVM. This improves security, decreases the startup time, and increases
-hardware utilization. Firecracker has also been integrated in container
-runtimes, for example
-[Kata Containers](https://github.com/kata-containers/documentation/wiki/Initial-release-of-Kata-Containers-with-Firecracker-support)
-and [Weaveworks Ignite](https://github.com/weaveworks/ignite).
 
-Firecracker was developed at Amazon Web Services to accelerate the speed and
-efficiency of services like [AWS Lambda](https://aws.amazon.com/lambda/) and
-[AWS Fargate](https://aws.amazon.com/fargate/). Firecracker is open sourced
-under [Apache version 2.0](LICENSE).
+  
+  
 
-To read more about Firecracker, check out
-[firecracker-microvm.io](https://firecracker-microvm.github.io).
+##  **Installation and setup**
 
-## Getting Started
+  
 
-To get started with Firecracker, download the latest
-[release](https://github.com/firecracker-microvm/firecracker/releases) binaries
-or build it from source.
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Python 3.11.9](https://www.python.org/downloads/?ref=gfxhacks.com) many other python version should work as well, but 3.11.9 was used for the creation of the script.
 
-You can build Firecracker on any Unix/Linux system that has Docker running (we
-use a development container) and `bash` installed, as follows:
+  
+
+From your command line:
 
 ```bash
-git clone https://github.com/firecracker-microvm/firecracker
-cd firecracker
-tools/devtool build
-toolchain="$(uname -m)-unknown-linux-musl"
+# Clone this repository
+git clone https://github.com/BertramAakjaer/Python_duplicate_file_checker.git
+
+# Install streamlit library
+pip install streamlit
+
+# Install googletrans libary
+pip3 install googletrans==3.1.0a0
+
+# Enter the directory
+cd Subtitle-Language-Translator-SLT/
+
+# Run the script using streamlit and it should open in your default browser
+python -m streamlit run main.py
 ```
 
-The Firecracker binary will be placed at
-`build/cargo_target/${toolchain}/debug/firecracker`. For more information on
-building, testing, and running Firecracker, go to the
-[quickstart guide](docs/getting-started.md).
+##  **Usage**
 
-The overall security of Firecracker microVMs, including the ability to meet the
-criteria for safe multi-tenant computing, depends on a well configured Linux
-host operating system. A configuration that we believe meets this bar is
-included in [the production host setup document](docs/prod-host-setup.md).
+![Image](docs/screenshots/start.webp)
 
-## Contributing
+**1.** Firstly press the button *Browse files* and choose the subtitle (SubRip) file that is going to be translated.
 
-Firecracker is already running production workloads within AWS, but it's still
-Day 1 on the journey guided by our [mission](CHARTER.md). There's a lot more to
-build and we welcome all contributions.
+![Image](docs/screenshots/uploaded_file.webp)
 
-To contribute to Firecracker, check out the development setup section in the
-[getting started guide](docs/getting-started.md) and then the Firecracker
-[contribution guidelines](CONTRIBUTING.md).
+**2.** Now you can go ahead and check if its the right file thats been choosen, if thats the case you can simply enter a new name, destination language and press *Start translation!*.
 
-## Releases
+![Image](docs/screenshots/new_properties.webp)
+![Image](docs/screenshots/calculating_time.webp)
+**3.** Now the .srt file will be translated and you can sit back and relax in the estimated time period, tha u can read under the button.
 
-New Firecracker versions are released via the GitHub repository
-[releases](https://github.com/firecracker-microvm/firecracker/releases) page,
-typically every two or three months. A history of changes is recorded in our
-[changelog](CHANGELOG.md).
+![Image](docs/screenshots/Done.webp)
 
-The Firecracker release policy is detailed [here](docs/RELEASE_POLICY.md).
+**4.** After the process finishes it will open the windows file-explorer in the output directory where the file has been written to.
 
-## Design
+![Image](docs/screenshots/file_explorer.webp)
 
-Firecracker's overall architecture is described in
-[the design document](docs/design.md).
+##  **License**
+This project is licensed under the [GNU V3 License](LICENSE).
 
-## Features & Capabilities
+  
+  
 
-Firecracker consists of a single micro Virtual Machine Manager process that
-exposes an API endpoint to the host once started. The API is
-[specified in OpenAPI format](src/firecracker/swagger/firecracker.yaml). Read
-more about it in the [API docs](docs/api_requests).
+##  **Socials**
 
-The **API endpoint** can be used to:
-
-- Configure the microvm by:
-  - Setting the number of vCPUs (the default is 1).
-  - Setting the memory size (the default is 128 MiB).
-  - Configuring a [CPU template](docs/cpu_templates/cpu-templates.md).
-- Add one or more network interfaces to the microVM.
-- Add one or more read-write or read-only disks to the microVM, each represented
-  by a file-backed block device.
-- Trigger a block device re-scan while the guest is running. This enables the
-  guest OS to pick up size changes to the block device's backing file.
-- Change the backing file for a block device, before or after the guest boots.
-- Configure rate limiters for virtio devices which can limit the bandwidth,
-  operations per second, or both.
-- Configure the logging and metric system.
-- `[BETA]` Configure the data tree of the guest-facing metadata service. The
-  service is only available to the guest if this resource is configured.
-- Add a [vsock socket](docs/vsock.md) to the microVM.
-- Add a [entropy device](docs/entropy.md) to the microVM.
-- Start the microVM using a given kernel image, root file system, and boot
-  arguments.
-- \[x86_64 only\] Stop the microVM.
-
-**Built-in Capabilities**:
-
-- Demand fault paging and CPU oversubscription enabled by default.
-- Advanced, thread-specific seccomp filters for enhanced security.
-- [Jailer](docs/jailer.md) process for starting Firecracker in production
-  scenarios; applies a cgroup/namespace isolation barrier and then drops
-  privileges.
-
-## Tested platforms
-
-We test all combinations of:
-
-| Instance  | Host OS & Kernel  | Guest Rootfs | Guest Kernel |
-| :-------- | :---------------- | :----------- | :----------- |
-| c5n.metal | al2    linux_4.14 | ubuntu 22.04 | linux_4.14   |
-| m5n.metal | al2    linux_5.10 |              | linux_5.10   |
-| m6i.metal | al2023 linux_6.1  |              |              |
-| m6a.metal |                   |              |              |
-| m6g.metal |                   |              |              |
-| m7g.metal |                   |              |              |
-
-## Known issues and Limitations
-
-- The `pl031` RTC device on aarch64 does not support interrupts, so guest
-  programs which use an RTC alarm (e.g. `hwclock`) will not work.
-
-## Performance
-
-Firecracker's performance characteristics are listed as part of the
-[specification documentation](SPECIFICATION.md). All specifications are a part
-of our commitment to supporting container and function workloads in serverless
-operational models, and are therefore enforced via continuous integration
-testing.
-
-## Policy for Security Disclosures
-
-The security of Firecracker is our top priority. If you suspect you have
-uncovered a vulnerability, contact us privately, as outlined in our
-[security policy document](SECURITY.md); we will immediately prioritize your
-disclosure.
-
-## FAQ & Contact
-
-Frequently asked questions are collected in our [FAQ doc](FAQ.md).
-
-You can get in touch with the Firecracker community in the following ways:
-
-- Security-related issues, see our [security policy document](SECURITY.md).
-- Chat with us on our
-  [Slack workspace](https://join.slack.com/t/firecracker-microvm/shared_invite/zt-1zlb87h4z-NED1rBhVqOQ1ygBgT76wlg)
-  _Note: most of the maintainers are on a European time zone._
-- Open a GitHub issue in this repository.
-- Email the maintainers at
-  [firecracker-maintainers@amazon.com](mailto:firecracker-maintainers@amazon.com).
-
-When communicating within the Firecracker community, please mind our
-[code of conduct](CODE_OF_CONDUCT.md).
+>  [aakjaer.site](https://www.aakjaer.site) &nbsp;&middot;&nbsp;
+>  GitHub [@BertramAakjær](https://github.com/BertramAakjaer) &nbsp;&middot;&nbsp;
+>  Twitter [@BertramAakjær](https://twitter.com/BertramAakjaer)
