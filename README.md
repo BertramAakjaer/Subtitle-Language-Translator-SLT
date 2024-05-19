@@ -68,13 +68,12 @@ python -m streamlit run main.py
 ![Image](docs/screenshots/file_explorer.webp)
 
 ##  **License**
-This project is licensed under the [GNU V3 License](LICENSE).
+This project is licensed under the [GNU General Public v3 License](LICENSE).
 
   
   
 
 ##  **Socials**
-
 >  [aakjaer.site](https://www.aakjaer.site) &nbsp;&middot;&nbsp;
 >  GitHub [@BertramAakjær](https://github.com/BertramAakjaer) &nbsp;&middot;&nbsp;
 >  Twitter [@BertramAakjær](https://twitter.com/BertramAakjaer)
