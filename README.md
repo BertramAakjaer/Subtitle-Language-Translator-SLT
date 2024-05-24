@@ -32,7 +32,7 @@ From your command line:
 
 ```bash
 # Clone this repository
-git clone https://github.com/BertramAakjaer/Python_duplicate_file_checker.git
+git clone https://github.com/BertramAakjaer/Subtitle-Language-Translator-SLT.git
 
 # Install streamlit library
 pip install streamlit
